@@ -1,0 +1,55 @@
+<br />
+<div class="container">
+  <h1>Listagem de pessoas</h1>
+  <div class="direita">
+    <button
+      (click)="novo()"
+      type="button"
+      class="btn btn-info btn-rounded"
+      mdbRipple
+    >
+      Nova Pessoa
+    </button>
+  </div>
+  <br />
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Id</th>
+        <th>Nome</th>
+        <th>Idade</th>
+        <th>Documento</th>
+        <th>Ação</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (pessoa of pessoas; track $index) {
+      <tr>
+        <td>{{ pessoa.id }}</td>
+        <td>{{ pessoa.nome }}</td>
+        <td>{{ pessoa.idade }}</td>
+        <td>{{ pessoa.documento }}</td>
+        <td class="direita">
+          <button
+            type="button"
+            class="btn btn-warning btn-rounded"
+            mdbRipple
+            routerLink="/admin/pessoas/edit/{{ pessoa.id }}"
+          >
+            Editar
+          </button>
+          <button
+            (click)="deletar()"
+            type="button"
+            class="btn btn-danger btn-rounded"
+            mdbRipple
+          >
+            Excluir
+          </button>
+        </td>
+      </tr>
+      }
+    </tbody>
+  </table>
+</div>
