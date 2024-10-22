@@ -15,7 +15,9 @@ export class PessoaslistComponent {
   constructor(){
 
     const navigation = this.router.getCurrentNavigation();
+
     const pessoaNova = navigation?.extras.state?.['pessoaNova'];
+
     const pessoaEditada = navigation?.extras.state?.['pessoaEditada'];
 
     let pessoa1:Pessoa = new Pessoa()
@@ -47,8 +49,10 @@ export class PessoaslistComponent {
       this.pessoas[indice] = pessoaEditada
 
     }else if(pessoaNova){
+
       pessoaNova.id = this.pessoas.length + 1
       this.pessoas.push(pessoaNova)
+      
     }
   }
 

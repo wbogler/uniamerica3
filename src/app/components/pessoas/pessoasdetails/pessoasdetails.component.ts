@@ -16,14 +16,17 @@ export class PessoasdetailsComponent {
   pessoa:Pessoa = new Pessoa();
 
   router = inject(ActivatedRoute)
+
   routerGenereic = inject(Router)
 
   constructor(){
+
     let id = this.router.snapshot.params['id']
     if(id>0){
       this.findById(id)
     }
   }
+
   findById(id:number){
     //busca no back-end
     this.pessoa.id = id
@@ -33,16 +36,18 @@ export class PessoasdetailsComponent {
   }
 
   salvar(){
+
     if(this.pessoa.id>0){
+      
       this.routerGenereic.navigate(['admin/pessoas'], {state:{pessoaEditada: this.pessoa}})
       alert("Editado com sucesso")
+
     }else{
+      
       this.routerGenereic.navigate(['admin/pessoas'], {state:{pessoaNova: this.pessoa}})
       alert("Pessoa salva")
+
     }
 
   }
-
-
-
 }
