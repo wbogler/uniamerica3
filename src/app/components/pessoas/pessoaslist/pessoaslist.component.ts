@@ -1,16 +1,27 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, Input, TemplateRef, ViewChild } from '@angular/core';
 import { Pessoa } from '../../../models/pessoa';
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { MdbModalModule, MdbModalRef, MdbModalService } from 'mdb-angular-ui-kit/modal';
+import { PessoasdetailsComponent } from "../pessoasdetails/pessoasdetails.component";
 
 @Component({
   selector: 'app-pessoaslist',
   standalone: true,
-  imports: [RouterLink, CommonModule],
+  imports: [RouterLink, CommonModule, MdbModalModule, PessoasdetailsComponent],
   templateUrl: './pessoaslist.component.html',
   styleUrl: './pessoaslist.component.scss'
 })
 export class PessoaslistComponent {
+
+  //para abrir a modal
+  modalService = inject(MdbModalService);
+
+  //referencia do template da modal no HTML
+  @ViewChild('modalPessoaDetails') modalPessoaDetails!: TemplateRef<any>;
+
+  //referência da modal para conseguirmos fechar
+  modalRef!:MdbModalRef<any>;
 
   constructor(){
 
@@ -61,8 +72,16 @@ export class PessoaslistComponent {
 
   router = inject(Router)
 
+  pessoaEdit:Pessoa = new Pessoa()
+
   novo(){
-    this.router.navigate(['admin/pessoas/new'])
+    this.pessoaEdit = new Pessoa()
+    this.modalRef = this.modalService.open(this.modalPessoaDetails)
+  }
+
+  edit(pessoa:Pessoa){
+    this.pessoaEdit = Object.assign({}, pessoa)
+    this.modalRef = this.modalService.open(this.modalPessoaDetails)
   }
 
   deletar(pessoa:Pessoa){
@@ -74,6 +93,20 @@ export class PessoaslistComponent {
       this.pessoas.splice(indice,1)
     }
 
+  }
+
+  retornoDetalhe(pessoa:Pessoa){
+    let indiceExiste = this.pessoas.findIndex(
+      x => {return x.id == pessoa.id}
+    )
+
+    if(indiceExiste >= 0){
+      this.pessoas[indiceExiste] = pessoa
+    }else{
+      this.pessoas.push(pessoa)
+    }
+
+    this.modalRef.close()
   }
 
 }

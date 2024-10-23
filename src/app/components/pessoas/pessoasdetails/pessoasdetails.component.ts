@@ -1,8 +1,9 @@
-import { Component, inject } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { Pessoa } from '../../../models/pessoa';
 import { MdbFormsModule } from 'mdb-angular-ui-kit/forms';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-pessoasdetails',
@@ -13,7 +14,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class PessoasdetailsComponent {
 
-  pessoa:Pessoa = new Pessoa();
+  @Input('pessoa') pessoa:Pessoa = new Pessoa();
+
+  @Output('retorno') retorno = new EventEmitter<any>();
 
   router = inject(ActivatedRoute)
 
@@ -48,6 +51,8 @@ export class PessoasdetailsComponent {
       alert("Pessoa salva")
 
     }
+
+    this.retorno.emit(this.pessoa)
 
   }
 }
