@@ -3,6 +3,8 @@ import { Pessoa } from '../../../models/pessoa';
 import { MdbFormsModule } from 'mdb-angular-ui-kit/forms';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { PessoasServiceService } from '../../../service/pessoas-service.service';
+import { PessoaRequest } from '../../../models/pessoa-request';
 
 
 @Component({
@@ -17,6 +19,8 @@ export class PessoasdetailsComponent {
   @Input('pessoa') pessoa:Pessoa = new Pessoa();
 
   @Output('retorno') retorno = new EventEmitter<any>();
+
+  pessoaService = inject(PessoasServiceService)
 
   router = inject(ActivatedRoute)
 
@@ -34,7 +38,7 @@ export class PessoasdetailsComponent {
     //busca no back-end
     this.pessoa.id = id
     this.pessoa.nome = "Willian"
-    this.pessoa.documento = "dasda"
+    this.pessoa.doc = "dasda"
     this.pessoa.idade = 30
   }
 
@@ -46,13 +50,30 @@ export class PessoasdetailsComponent {
       alert("Editado com sucesso")
 
     }else{
-      
-      this.routerGenereic.navigate(['admin/pessoas'], {state:{pessoaNova: this.pessoa}})
-      alert("Pessoa salva")
+      let roles:number[] = [1]
+      let pessoaRequest:PessoaRequest = new PessoaRequest(
+        this.pessoa.nome, this.pessoa.idade, this.pessoa.doc, roles,"admin"
+      )
+      alert(this.pessoa.doc)
+      alert(pessoaRequest.doc)
+      this.pessoaService.savePessoa(pessoaRequest).subscribe(
+        {
+          next: value =>
+          {
+            this.routerGenereic.navigate(['admin/pessoas'], {state:{pessoaNova: value}})
+          },
+          error: erro =>
+          {
+            alert("problema")
+          }
+        }
+      )
 
     }
 
     this.retorno.emit(this.pessoa)
 
   }
+
+
 }

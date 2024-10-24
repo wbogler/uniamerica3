@@ -4,6 +4,8 @@ import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MdbModalModule, MdbModalRef, MdbModalService } from 'mdb-angular-ui-kit/modal';
 import { PessoasdetailsComponent } from "../pessoasdetails/pessoasdetails.component";
+import { PessoasServiceService } from '../../../service/pessoas-service.service';
+import { find } from 'rxjs';
 
 @Component({
   selector: 'app-pessoaslist',
@@ -25,33 +27,13 @@ export class PessoaslistComponent {
 
   constructor(){
 
+    this.findAll()
+
     const navigation = this.router.getCurrentNavigation();
 
     const pessoaNova = navigation?.extras.state?.['pessoaNova'];
 
     const pessoaEditada = navigation?.extras.state?.['pessoaEditada'];
-
-    let pessoa1:Pessoa = new Pessoa()
-    pessoa1.id=1
-    pessoa1.nome = "willian"
-    pessoa1.idade = 33
-    pessoa1.documento= "asb"
-
-    let pessoa2:Pessoa = new Pessoa()
-    pessoa2.id=2
-    pessoa2.nome = "Bogler"
-    pessoa2.idade = 32
-    pessoa2.documento= "aasdasb"
-
-    let pessoa3:Pessoa = new Pessoa()
-    pessoa3.id=3
-    pessoa3.nome = "Silva"
-    pessoa3.idade = 31
-    pessoa3.documento= "asd9898"
-
-    this.pessoas.push(pessoa1)
-    this.pessoas.push(pessoa2)
-    this.pessoas.push(pessoa3)
 
     if(pessoaEditada){
       let indice = this.pessoas.findIndex(
@@ -63,8 +45,8 @@ export class PessoaslistComponent {
 
       pessoaNova.id = this.pessoas.length + 1
       this.pessoas.push(pessoaNova)
-      
     }
+
   }
 
   tebleHead:string[] = ["id","nome","idade","documento"]
@@ -85,28 +67,49 @@ export class PessoaslistComponent {
   }
 
   deletar(pessoa:Pessoa){
-    if(confirm(`Excluir ${pessoa.nome}?`)){
-      let indice = this.pessoas.findIndex(
-        x => {return x.id == pessoa.id}
+    if(confirm(`Excluir ${pessoa.nome}?`) && pessoa.id>0){
+        
+      this.pessoaService.deleteById(pessoa.id).subscribe(
+        {
+          next: value =>
+          {
+            this.findAll()
+          },
+          error: erro =>
+          {
+            alert("problema")
+          }
+        }
       )
-  
-      this.pessoas.splice(indice,1)
     }
-
+    
   }
 
   retornoDetalhe(pessoa:Pessoa){
-    let indiceExiste = this.pessoas.findIndex(
-      x => {return x.id == pessoa.id}
-    )
-
-    if(indiceExiste >= 0){
-      this.pessoas[indiceExiste] = pessoa
-    }else{
-      this.pessoas.push(pessoa)
-    }
-
+    this.findAll()
     this.modalRef.close()
+    this.findAll()
   }
+
+  //primeira coisa: injetar o service
+  pessoaService = inject(PessoasServiceService)
+
+  //crie a sua função
+  findAll(){
+    this.pessoaService.findAll().subscribe(
+      {
+        next: value =>
+        {
+          this.pessoas = value
+        },
+        error: erro =>
+        {
+          alert("problema")
+        }
+      }
+    )
+  }
+
+  
 
 }
