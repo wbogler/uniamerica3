@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/pessoa")
+@CrossOrigin("*")
 public class PessoaController {
 
     @Autowired
