@@ -39,7 +39,8 @@
           >
             Editar
           </button>
-          <button
+          @if(permissionService.hasPermission("ADMIN")){
+            <button
             (click)="deletar(pessoa)"
             type="button"
             class="btn btn-danger btn-rounded"
@@ -47,6 +48,7 @@
           >
             Excluir
           </button>
+          }
         </td>
       </tr>
       }

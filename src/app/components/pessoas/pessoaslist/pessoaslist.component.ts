@@ -6,6 +6,7 @@ import { MdbModalModule, MdbModalRef, MdbModalService } from 'mdb-angular-ui-kit
 import { PessoasdetailsComponent } from "../pessoasdetails/pessoasdetails.component";
 import { PessoasServiceService } from '../../../service/pessoas-service.service';
 import { find } from 'rxjs';
+import { LoginService } from '../../../service/login-service.service';
 
 @Component({
   selector: 'app-pessoaslist',
@@ -15,7 +16,7 @@ import { find } from 'rxjs';
   styleUrl: './pessoaslist.component.scss'
 })
 export class PessoaslistComponent {
-
+  permissionService = inject(LoginService)
   //para abrir a modal
   modalService = inject(MdbModalService);
 
@@ -77,7 +78,7 @@ export class PessoaslistComponent {
           },
           error: erro =>
           {
-            alert("problema")
+            console.log("problema")
           }
         }
       )
@@ -104,7 +105,7 @@ export class PessoaslistComponent {
         },
         error: erro =>
         {
-          alert("problema")
+          console.log("problema")
         }
       }
     )

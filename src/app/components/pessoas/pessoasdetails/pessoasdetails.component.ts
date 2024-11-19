@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PessoasServiceService } from '../../../service/pessoas-service.service';
 import { PessoaRequest } from '../../../models/pessoa-request';
+import { LoginService } from '../../../service/login-service.service';
 
 
 @Component({
@@ -25,6 +26,7 @@ export class PessoasdetailsComponent {
   router = inject(ActivatedRoute)
 
   routerGenereic = inject(Router)
+
 
   constructor(){
 
@@ -47,15 +49,13 @@ export class PessoasdetailsComponent {
     if(this.pessoa.id>0){
       
       this.routerGenereic.navigate(['admin/pessoas'], {state:{pessoaEditada: this.pessoa}})
-      alert("Editado com sucesso")
+      console.log("Editado com sucesso")
 
     }else{
       let roles:number[] = [1]
       let pessoaRequest:PessoaRequest = new PessoaRequest(
         this.pessoa.nome, this.pessoa.idade, this.pessoa.doc, roles,"admin"
       )
-      alert(this.pessoa.doc)
-      alert(pessoaRequest.doc)
       this.pessoaService.savePessoa(pessoaRequest).subscribe(
         {
           next: value =>
@@ -64,7 +64,7 @@ export class PessoasdetailsComponent {
           },
           error: erro =>
           {
-            alert("problema")
+            console.log("problema")
           }
         }
       )
