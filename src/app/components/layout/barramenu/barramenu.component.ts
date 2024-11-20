@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { MdbCollapseModule } from 'mdb-angular-ui-kit/collapse';
+import { LoginService } from '../../../service/login-service.service';
 
 @Component({
   selector: 'app-barramenu',
@@ -10,6 +11,8 @@ import { MdbCollapseModule } from 'mdb-angular-ui-kit/collapse';
   styleUrl: './barramenu.component.scss'
 })
 export class BarramenuComponent {
+
+  permissao = inject(LoginService)
 
 
 }

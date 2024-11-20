@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { jwtDecode, JwtPayload } from "jwt-decode";
 import { Login } from '../models/login';
 import { Usuario } from '../models/usuario';
-
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -12,42 +12,50 @@ import { Usuario } from '../models/usuario';
 export class LoginService {
 
   http = inject(HttpClient);
-  API = "http://localhost:8080/login";
-
+  API = environment.rotaEndPoint + "/login";
 
   constructor() { }
 
-
   logar(login: Login): Observable<string> {
-    return this.http.post<string>(this.API, login, {responseType: 'text' as 'json'});
+    return this.http.post<string>(this.API, login, { responseType: 'text' as 'json' });
   }
 
   addToken(token: string) {
-    localStorage.setItem('token', token);
+    if (typeof window !== 'undefined' && localStorage) {
+      localStorage.setItem('token', token);
+    }
   }
 
   removerToken() {
-    localStorage.removeItem('token');
+    if (typeof window !== 'undefined' && localStorage) {
+      localStorage.removeItem('token');
+    }
   }
 
   getToken() {
-    return localStorage.getItem('token');
+    if (typeof window !== 'undefined' && localStorage) {
+      return localStorage.getItem('token');
+    }
+    return null;
   }
 
   jwtDecode() {
-    let token = this.getToken();
+    const token = this.getToken();
     if (token) {
-      return jwtDecode<JwtPayload>(token);
+      try {
+        return jwtDecode<JwtPayload>(token);
+      } catch (error) {
+        console.error("Erro ao decodificar o token:", error);
+      }
     }
-    return "";
+    return null;
   }
 
-  hasPermission(role: string) {
-    let user = this.jwtDecode() as Usuario;
-    if (user.role == role)
+  hasPermission(role: string): boolean {
+    const user = this.jwtDecode() as Usuario | null;
+    if (user && user.role === role) {
       return true;
-    else
-      return false;
+    }
+    return false;
   }
-
 }

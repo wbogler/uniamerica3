@@ -3,6 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Pessoa } from '../models/pessoa';
 import { PessoaRequest } from '../models/pessoa-request';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -13,10 +14,10 @@ export class PessoasServiceService {
   
   http = inject(HttpClient)
 
-  API = "http://localhost:8080/pessoa"
+  API = environment.rotaEndPoint+"/pessoa"
 
   findAll(): Observable<Pessoa[]>{
-    return this.http.get<Pessoa[]>(this.API);
+    return this.http.get<Pessoa[]>(this.API+"/findall");
   }
 
   deleteById(idPessoa:number){
