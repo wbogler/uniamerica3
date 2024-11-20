@@ -1,14 +1,14 @@
 CREATE TABLE roles (
-                      id SERIAL PRIMARY KEY,
-                      role VARCHAR(255) NOT NULL
+                       id SERIAL PRIMARY KEY,
+                       role VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE pessoa (
-                         id SERIAL PRIMARY KEY,
-                         nome VARCHAR(255) NOT NULL,
-                         idade INT NOT NULL,
-                         senha VARCHAR(10) NOT NULL,
-                         documento VARCHAR(255) NOT NULL UNIQUE
+                        id SERIAL PRIMARY KEY,
+                        nome VARCHAR(255) NOT NULL,
+                        idade INT NOT NULL,
+                        senha VARCHAR(10) NOT NULL,
+                        documento VARCHAR(255) NOT NULL UNIQUE
 );
 
 CREATE TABLE pessoa_role (

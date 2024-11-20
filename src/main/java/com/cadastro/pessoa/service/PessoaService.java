@@ -20,14 +20,6 @@ public class PessoaService {
     @Autowired
     private RoleRepository roleRepository;
 
-    public List<RoleEntity> login(String login, String senha){
-        var pessoa = pessoaRepository.findPessoaByDocumento(login);
-        if(credentialMatch(pessoa,login,senha)) {
-            return pessoa.getRoles();
-        }else{
-            return null;
-        }
-    }
 
     public PessoasEntity findPessoaById(Long idPessoa) throws UserPrincipalNotFoundException {
         return pessoaRepository.findById(idPessoa).orElseThrow(

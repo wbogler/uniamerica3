@@ -6,6 +6,7 @@ import com.cadastro.pessoa.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,6 +18,9 @@ public class UsuarioService {
     private JwtUtils jwtService;
     @Autowired
     private AuthenticationManager authenticationManager;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
 
     public String logar(LoginRequest login) {
@@ -34,4 +38,14 @@ public class UsuarioService {
         return jwtToken;
     }
 
+    public void saveNewUser(String usuario, String password, Boolean isAdmin) {
+        repository.save(
+                new UsuarioEntity(
+                        null,
+                        usuario,
+                        passwordEncoder.encode(password),
+                        (isAdmin?"admin":"user")
+                )
+        );
+    }
 }

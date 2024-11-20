@@ -4,6 +4,7 @@ import com.cadastro.pessoa.service.PessoaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.nio.file.attribute.UserPrincipalNotFoundException;
@@ -25,7 +26,7 @@ public class PessoaController {
         );
     }
 
-    @GetMapping
+    @GetMapping("/findall")
     public ResponseEntity<List<PessoaResponse>> findAllPessoa(){
         return ResponseEntity.ok(
                 pessoaService.findAllPessoa().stream().map(PessoaMapper::toResponse)
@@ -44,6 +45,7 @@ public class PessoaController {
         );
     }
 
+    @PreAuthorize("hasRole('admin')")
     @DeleteMapping("delete/{idUser}")
     public ResponseEntity<HttpStatus> deletePessoa(@PathVariable (name = "idUser") Long id){
         try{

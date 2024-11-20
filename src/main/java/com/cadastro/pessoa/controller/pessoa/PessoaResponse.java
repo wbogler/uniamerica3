@@ -6,7 +6,6 @@ public record PessoaResponse(
         Long id,
         String nome,
         int idade,
-        String documento,
-        List<Long> roles
+        String doc
 ) {
 }

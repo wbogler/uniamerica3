@@ -13,8 +13,7 @@ public class PessoaMapper {
                 pessoa.getId(),
                 pessoa.getNome(),
                 pessoa.getIdade(),
-                pessoa.getDocumento(),
-                listIds(pessoa.getRoles())
+                pessoa.getDocumento()
 
         );
     }
@@ -25,8 +24,7 @@ public class PessoaMapper {
                 pessoaRequest.nome(),
                 pessoaRequest.idade(),
                 pessoaRequest.doc(),
-                pessoaRequest.senha(),
-                roleList(pessoaRequest.roles())
+                pessoaRequest.senha()
         );
     }
 

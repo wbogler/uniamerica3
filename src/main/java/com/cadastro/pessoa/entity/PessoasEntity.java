@@ -32,12 +32,5 @@ public class PessoasEntity {
     @Column(name = "senha")
     private String senha;
 
-    @ManyToMany
-    @JoinTable(
-            name = "pessoa_role",
-            joinColumns = @JoinColumn(name = "pessoa_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id")
-    )
-    List<RoleEntity> roles;
 
 }
