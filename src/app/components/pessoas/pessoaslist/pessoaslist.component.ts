@@ -1,53 +1,27 @@
-import { Component, inject, Input, TemplateRef, ViewChild } from '@angular/core';
+import { Component, inject, Input, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Pessoa } from '../../../models/pessoa';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MdbModalModule, MdbModalRef, MdbModalService } from 'mdb-angular-ui-kit/modal';
-import { PessoasdetailsComponent } from "../pessoasdetails/pessoasdetails.component";
 import { PessoasServiceService } from '../../../service/pessoas-service.service';
-import { find } from 'rxjs';
 import { LoginService } from '../../../service/login-service.service';
 
 @Component({
   selector: 'app-pessoaslist',
   standalone: true,
-  imports: [RouterLink, CommonModule, MdbModalModule, PessoasdetailsComponent],
+  imports: [ CommonModule, MdbModalModule],
   templateUrl: './pessoaslist.component.html',
   styleUrl: './pessoaslist.component.scss'
 })
-export class PessoaslistComponent {
+export class PessoaslistComponent implements OnInit{
   permissionService = inject(LoginService)
-  //para abrir a modal
-  modalService = inject(MdbModalService);
-
-  //referencia do template da modal no HTML
-  @ViewChild('modalPessoaDetails') modalPessoaDetails!: TemplateRef<any>;
-
-  //referência da modal para conseguirmos fechar
-  modalRef!:MdbModalRef<any>;
 
   constructor(){
 
-    this.findAll()
+  }
 
-    const navigation = this.router.getCurrentNavigation();
-
-    const pessoaNova = navigation?.extras.state?.['pessoaNova'];
-
-    const pessoaEditada = navigation?.extras.state?.['pessoaEditada'];
-
-    if(pessoaEditada){
-      let indice = this.pessoas.findIndex(
-        x => {return x.id == pessoaEditada.id}
-      )
-      this.pessoas[indice] = pessoaEditada
-
-    }else if(pessoaNova){
-
-      pessoaNova.id = this.pessoas.length + 1
-      this.pessoas.push(pessoaNova)
-    }
-
+  ngOnInit(): void {
+    
   }
 
   tebleHead:string[] = ["id","nome","idade","documento"]
@@ -58,13 +32,11 @@ export class PessoaslistComponent {
   pessoaEdit:Pessoa = new Pessoa()
 
   novo(){
-    this.pessoaEdit = new Pessoa()
-    this.modalRef = this.modalService.open(this.modalPessoaDetails)
+    this.router.navigate(['/admin/pessoas/new'])
   }
 
   edit(pessoa:Pessoa){
-    this.pessoaEdit = Object.assign({}, pessoa)
-    this.modalRef = this.modalService.open(this.modalPessoaDetails)
+    this.router.navigate(['/admin/pessoas/edit/'+pessoa.id])
   }
 
   deletar(pessoa:Pessoa){
@@ -86,16 +58,8 @@ export class PessoaslistComponent {
     
   }
 
-  retornoDetalhe(pessoa:Pessoa){
-    this.findAll()
-    this.modalRef.close()
-    this.findAll()
-  }
-
-  //primeira coisa: injetar o service
   pessoaService = inject(PessoasServiceService)
 
-  //crie a sua função
   findAll(){
     this.pessoaService.findAll().subscribe(
       {
@@ -105,7 +69,7 @@ export class PessoaslistComponent {
         },
         error: erro =>
         {
-          console.log("problema")
+          alert("Erro")
         }
       }
     )

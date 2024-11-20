@@ -6,6 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { PessoasServiceService } from '../../../service/pessoas-service.service';
 import { PessoaRequest } from '../../../models/pessoa-request';
 import { LoginService } from '../../../service/login-service.service';
+import { Usuario } from '../../../models/usuario';
 
 
 @Component({
@@ -21,9 +22,13 @@ export class PessoasdetailsComponent {
 
   @Output('retorno') retorno = new EventEmitter<any>();
 
+  acao:string = "salvar"
+
   pessoaService = inject(PessoasServiceService)
 
   router = inject(ActivatedRoute)
+
+  isNew:boolean = true;
 
   routerGenereic = inject(Router)
 
@@ -32,35 +37,55 @@ export class PessoasdetailsComponent {
 
     let id = this.router.snapshot.params['id']
     if(id>0){
+      this.acao = "atualizar"
+      this.isNew=false
       this.findById(id)
     }
   }
 
   findById(id:number){
-    //busca no back-end
-    this.pessoa.id = id
-    this.pessoa.nome = "Willian"
-    this.pessoa.doc = "dasda"
-    this.pessoa.idade = 30
+    this.pessoaService.findById(id).subscribe({
+      next:usuario=>{
+        this.pessoa.id = usuario.id;
+        this.pessoa.nome = usuario.nome;
+        this.pessoa.idade = usuario.id;
+        this.pessoa.doc = usuario.doc;
+      },
+      error:erro=>{
+        console.log("problema ao buscar por id")
+      }
+    })
   }
 
   salvar(){
 
-    if(this.pessoa.id>0){
-      
-      this.routerGenereic.navigate(['admin/pessoas'], {state:{pessoaEditada: this.pessoa}})
-      console.log("Editado com sucesso")
+    let roles:number[] = [1]
+    let pessoaRequest:PessoaRequest = new PessoaRequest(
+      0,this.pessoa.nome, this.pessoa.idade, this.pessoa.doc, roles,"admin"
+    )
+    if(!this.isNew){
+      pessoaRequest.id= this.pessoa.id
+      console.log(this.pessoa.id)
+      console.log(this.pessoa.doc)
+      this.pessoaService.atualizarPessoa(pessoaRequest).subscribe(
+        {
+          next: value =>
+          {
+            this.routerGenereic.navigate(['admin/pessoas'])
+          },
+          error: erro =>
+          {
+            console.log("problema")
+          }
+        }
+      )
 
     }else{
-      let roles:number[] = [1]
-      let pessoaRequest:PessoaRequest = new PessoaRequest(
-        this.pessoa.nome, this.pessoa.idade, this.pessoa.doc, roles,"admin"
-      )
       this.pessoaService.savePessoa(pessoaRequest).subscribe(
         {
           next: value =>
           {
-            this.routerGenereic.navigate(['admin/pessoas'], {state:{pessoaNova: value}})
+            this.routerGenereic.navigate(['admin/pessoas'])
           },
           error: erro =>
           {
@@ -70,8 +95,6 @@ export class PessoasdetailsComponent {
       )
 
     }
-
-    this.retorno.emit(this.pessoa)
 
   }
 

@@ -1,4 +1,4 @@
 export const environment = {
 
-    rotaEndPoint: "http://18.218.147.45"
+    rotaEndPoint: "http://54.227.228.32"
 };

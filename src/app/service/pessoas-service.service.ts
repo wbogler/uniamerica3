@@ -28,12 +28,12 @@ export class PessoasServiceService {
     return this.http.post<Pessoa>(this.API + "/create",pesoa)
   }
 
-  atualizarPessoa(pesoa:PessoaRequest, idPessoa:number){
-    return this.http.put<Pessoa>(this.API + "/update/" + idPessoa,pesoa)
+  atualizarPessoa(pesoa:PessoaRequest){
+    return this.http.put<HttpStatusCode.Created>(this.API + "/atualizar",pesoa)
   }
 
   findById(idPessoa:number){
-    return this.http.get<Pessoa>(this.API + "/findone" + idPessoa)
+    return this.http.get<Pessoa>(this.API + "/findone/" + idPessoa)
   }
 
   atualizarPessoaComParametros(pessoa: PessoaRequest, idPessoa: number) {
