@@ -1,14 +1,11 @@
 package com.cadastro.pessoa.service;
 
 import com.cadastro.pessoa.entity.PessoasEntity;
-import com.cadastro.pessoa.entity.RoleEntity;
 import com.cadastro.pessoa.repository.PessoaRepository;
-import com.cadastro.pessoa.repository.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.nio.file.attribute.UserPrincipalNotFoundException;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -16,9 +13,6 @@ public class PessoaService {
 
     @Autowired
     private PessoaRepository pessoaRepository;
-
-    @Autowired
-    private RoleRepository roleRepository;
 
 
     public PessoasEntity findPessoaById(Long idPessoa) throws UserPrincipalNotFoundException {
@@ -44,6 +38,10 @@ public class PessoaService {
         }catch (Exception e){
             throw new UserPrincipalNotFoundException("user not found");
         }
+    }
+
+    public void atualizarPessoa(PessoasEntity pessoasEntity){
+        pessoaRepository.save(pessoasEntity);
     }
 
     private Boolean credentialMatch(PessoasEntity pessoasEntity, String login, String senha){

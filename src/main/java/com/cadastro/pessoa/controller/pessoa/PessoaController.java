@@ -44,6 +44,14 @@ public class PessoaController {
                 )
         );
     }
+    @PutMapping("atualizar")
+    public ResponseEntity<HttpStatus> saveNewPessoa(@RequestBody PessoaRequestExisting pessoaRequest){
+        pessoaService.atualizarPessoa(
+                PessoaMapper.toEntityFromRequestExisting(pessoaRequest));
+
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
 
     @PreAuthorize("hasRole('admin')")
     @DeleteMapping("delete/{idUser}")

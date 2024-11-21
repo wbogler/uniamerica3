@@ -1,15 +1,11 @@
 package com.cadastro.pessoa.controller.login;
 
-import com.cadastro.pessoa.entity.RoleEntity;
-import com.cadastro.pessoa.service.PessoaService;
 import com.cadastro.pessoa.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/")
